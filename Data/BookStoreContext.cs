@@ -9,6 +9,9 @@ namespace AspNetCore.EFCore.Demo.Data
 {
     public class BookStoreContext : DbContext
     {
+        //  In csproj file, add this under PropertyGroup: <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
+        //  from command prompt run: dotnet ef migrations add Init
+        //  then, run: dotnet ef database update
         public BookStoreContext(DbContextOptions<BookStoreContext> options) : base(options)
         {
 
