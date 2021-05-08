@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AspNetCore.EFCore.Demo.Data;
+using AspNetCore.EFCore.Demo.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +14,42 @@ namespace AspNetCore.EFCore.Demo.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        public IActionResult Get()
+        private readonly BookStoreContext _context;
+
+        public BooksController(BookStoreContext context)
         {
-            return Ok(new { Message = "Hello world!" });
+            this._context = context;
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Book>>> Get()
+        {
+            var books = await _context.Books.ToListAsync();
+            return Ok(books);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var book = await _context.Books.Where(b => b.Id == id).FirstOrDefaultAsync();
+
+            if (book != null)
+            {
+                return Ok(book);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Book>> Post(Book book)
+        {
+            await _context.Books.AddAsync(book);
+            await _context.SaveChangesAsync();
+            return Ok(book);
         }
     }
 }
