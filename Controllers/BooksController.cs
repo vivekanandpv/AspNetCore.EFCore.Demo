@@ -25,14 +25,15 @@ namespace AspNetCore.EFCore.Demo.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> Get()
         {
-            var books = await _context.Books.ToListAsync();
+            var books = await _context.Books.AsNoTracking().ToListAsync();
             return Ok(books);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var book = await _context.Books.Where(b => b.Id == id).FirstOrDefaultAsync();
+            var book = await _context.Books.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
+
 
             if (book != null)
             {
