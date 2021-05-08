@@ -14,7 +14,7 @@ namespace AspNetCore.EFCore.Demo.Models
         public int NPages { get; set; }
         public ICollection<Author> Authors { get; set; } = new HashSet<Author>();
         public Publisher Publisher { get; set; }
-        public ICollection<BookReview> Reviews { get; set; }
+        public ICollection<BookReview> Reviews { get; set; } = new List<BookReview>();
     }
 
     public class Author
